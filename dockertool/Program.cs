@@ -15,7 +15,7 @@ namespace dockertool
         { 
             if (args.Length != 1)
             {
-                Console.WriteLine("Pleas pass the name of the container as argument");
+                Console.WriteLine("Please pass the name of the container as argument");
             }
             else
             {
