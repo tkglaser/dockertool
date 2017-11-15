@@ -25,7 +25,17 @@ namespace dockertool
         {
             get
             {
-                return Info() != null;
+                Console.WriteLine($"Checking if container [{Name}] is running...");
+                var running = Info() != null;
+                if (running)
+                {
+                    Console.WriteLine($"Container [{Name}] is running.");
+                }
+                else
+                {
+                    Console.WriteLine($"Container [{Name}] is NOT running.");
+                }
+                return running;
             }
         }
 
@@ -38,15 +48,19 @@ namespace dockertool
                     Start();
                 }
 
-                return Info().NetworkSettings.Networks["nat"].IPAddress;
+                var ip = Info().NetworkSettings.Networks["nat"].IPAddress;
+                Console.WriteLine($"IP of container [{Name}] is [{ip}]");
+                return ip;
             }
         }
 
         public bool Start()
         {
+            Console.WriteLine($"Starting container [{Name}]...");
             var startTask = client.Containers
                 .StartContainerAsync(this.Name, new ContainerStartParameters());
             startTask.Wait();
+            Console.WriteLine($"Container [{Name}] started.");
             return startTask.Result;
         }
 

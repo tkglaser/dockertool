@@ -12,23 +12,25 @@ namespace dockertool
     class Program
     {
         static void Main(string[] args)
-        {
-            Run();
-        }
-
-        static void Run()
-        {
-            var containerName = "pauldb";
-            var container = new Container(containerName);
-            var ip = container.Ip;
-
-            using (StreamWriter w = File.AppendText(
-                Path.Combine(
-                    Environment.GetFolderPath(Environment.SpecialFolder.System), "drivers/etc/hosts")))
+        { 
+            if (args.Length != 1)
             {
-                w.WriteLine($"{ip} ${containerName}");
+                Console.WriteLine("Pleas pass the name of the container as argument");
+            }
+            else
+            {
+                Run(args[0]);
             }
         }
 
+        static void Run(string name)
+        {
+            var container = new Container(name);
+            var ip = container.Ip;
+
+            var hostsFile = new HostsFile();
+            hostsFile.SetIp(name, ip);
+            hostsFile.Save();
+        }
     }
 }
