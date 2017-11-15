@@ -13,27 +13,20 @@ namespace dockertool
     {
         static void Main(string[] args)
         {
-            Run().Wait();
+            Run();
         }
 
-        static async Task Run()
+        static void Run()
         {
-            var client = new DockerClientConfiguration(
-                new Uri("npipe://./pipe/docker_engine")).CreateClient();
-
-            var success = await client
-                .Containers
-                .StartContainerAsync("containername", new ContainerStartParameters());
-
-            var response = await client.Containers.ListContainersAsync(
-                new ContainersListParameters());
-            var ip = response[0].NetworkSettings.Networks["nat"].IPAddress;
+            var containerName = "pauldb";
+            var container = new Container(containerName);
+            var ip = container.Ip;
 
             using (StreamWriter w = File.AppendText(
                 Path.Combine(
                     Environment.GetFolderPath(Environment.SpecialFolder.System), "drivers/etc/hosts")))
             {
-                w.WriteLine($"{ip} containername");
+                w.WriteLine($"{ip} ${containerName}");
             }
         }
 
