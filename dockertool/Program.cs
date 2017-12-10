@@ -13,13 +13,15 @@ namespace dockertool
     {
         static void Main(string[] args)
         { 
-            if (args.Length != 1)
+            if (args.Length != 2)
             {
-                Console.WriteLine("Please pass the name of the container as argument");
+                Console.WriteLine("Please pass the command (\"dns\") and the name of the container as argument");
+                Console.WriteLine("Example:");
+                Console.WriteLine("> dockertool dns mycontainer");
             }
             else
             {
-                Run(args[0]);
+                Run(args[1]);
             }
         }
 
